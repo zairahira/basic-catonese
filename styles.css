@@ -51,6 +51,9 @@ h1 {
   color: var(--text-muted);
 }
 
+/* Ensure hidden attribute isn't overridden by display:flex on cards */
+[hidden] { display: none !important; }
+
 /* Word list */
 
 #word-list {
@@ -64,10 +67,13 @@ h1 {
 /* Card */
 
 .card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 1.75rem 1.5rem;
+  padding: 1.5rem 1rem 1.5rem 0.75rem;
   cursor: pointer;
   position: relative;
   box-shadow: var(--shadow);
@@ -77,7 +83,6 @@ h1 {
     border-color var(--transition),
     opacity var(--transition);
 
-  /* entrance animation state */
   opacity: 0;
   transform: translateY(20px);
 }
@@ -91,7 +96,6 @@ h1 {
   border-color: rgba(255, 255, 255, 0.14);
 }
 
-.card:active,
 .card:focus-visible {
   outline: none;
   border-color: var(--accent);
@@ -101,10 +105,52 @@ h1 {
 .card.playing {
   border-color: var(--accent);
   box-shadow: var(--shadow), 0 0 20px var(--accent-glow);
-  transform: scale(1.01);
+  transform: scale(1.01) translateY(0);
 }
 
-/* Card content */
+/* Drag handle */
+
+.drag-handle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 44px;
+  color: var(--text-muted);
+  opacity: 0;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  transition: opacity var(--transition);
+  border-radius: 8px;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.card:hover .drag-handle {
+  opacity: 0.45;
+}
+
+.drag-handle:hover {
+  opacity: 0.8 !important;
+}
+
+/* Always visible on touch devices */
+@media (hover: none) {
+  .drag-handle {
+    opacity: 0.35;
+  }
+}
+
+/* Card body */
+
+.card-body {
+  flex: 1;
+  min-width: 0;
+}
 
 .card-english {
   font-size: 0.75rem;
@@ -157,6 +203,99 @@ h1 {
   transform: scale(1.2);
 }
 
+/* Hide button */
+
+.hide-btn {
+  flex-shrink: 0;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-top: 0.1rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--transition), color var(--transition);
+  border-radius: 8px;
+}
+
+.card:hover .hide-btn {
+  opacity: 0.45;
+}
+
+.hide-btn:hover {
+  opacity: 1 !important;
+  color: var(--text-primary);
+}
+
+/* Always visible on touch devices */
+@media (hover: none) {
+  .hide-btn {
+    opacity: 0.35;
+  }
+}
+
+/* Drag states */
+
+.card.is-dragging {
+  transition: none;
+  opacity: 0.7;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+}
+
+.drag-placeholder {
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+/* Show hidden button */
+
+.show-hidden-btn {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0.875rem;
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.show-hidden-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.reset-btn {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  margin: 0.5rem auto 0;
+  padding: 0.625rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity var(--transition), color var(--transition);
+}
+
+.reset-btn:hover {
+  opacity: 1;
+  color: var(--text-primary);
+}
+
 /* Reduced motion */
 
 @media (prefers-reduced-motion: reduce) {
@@ -178,5 +317,3 @@ h1 {
     --transition: 120ms ease;
   }
 }
-
-/* Desktop centering already handled by max-width on card list */
