@@ -2,6 +2,8 @@
 
 A minimal static web app for learning everyday Cantonese words. Each card shows the English meaning, Chinese characters, Jyutping romanization, and plays the pronunciation on tap.
 
+![interface](image.png)
+
 ## Usage
 
 Open `index.html` directly in a browser, or serve the directory with any static file server:
